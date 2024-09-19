@@ -11,7 +11,7 @@ applications. The data is stored as a character array.
 See [manpage](https://antumdeluge.github.io/bin2header/reference/bin2header.1.html) for usage information.
 
 Modification by Travis/Sensorium 9/19/24:
-* Python script modified to accept "-t <Type Modifier>" to accept additional modifiers and prepend type
+* Python script modified to accept "-t (Type Modifier)" to accept additional modifiers and prepend type
 
 ## Licensing
 
