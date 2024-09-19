@@ -35,6 +35,7 @@ options_defaults = {
 	"version": {"short": "v", "value": False},
 	"output": {"short": "o", "value": ""},
 	"hname": {"short": "n", "value": ""},
+	"typemod": {"short": "t", "value": ""},
 	"chunksize": {"short": "s", "value": 1024 * 1024},
 	"nbdata": {"short": "d", "value": 12},
 	"datacontent": {"short": "c", "value": False},
@@ -113,6 +114,7 @@ def printUsage():
 			+ "\n\t-v, --version\t\tPrint version information & exit."
 			+ "\n\t-o, --output\t\tOutput file name."
 			+ "\n\t-n, --hname\t\tHeader name. Default is file name with \".\" replaced by \"_\"."
+			+ "\n\t-t, --typemod\t\tAdditional Type Modifier. Default none."
 			+ "\n\t-s, --chunksize\t\tRead buffer chunk size (in bytes)."
 			+ "\n\t\t\t\t  Default: {} (1 megabyte)".format(getOpt("chunksize", True)[1])
 			+ "\n\t-d, --nbdata\t\tNumber of bytes to write per line."
@@ -456,7 +458,7 @@ def toPrintableChar(c):
 #      Text to be used for header definition & array variable name.
 #  @tparam[opt] bool stdvector
 #      Flag to additionally store data in C++ std::vector.
-def convert(fin, fout, hname="", stdvector=False):
+def convert(fin, fout, hname="", stdvector=False, typemod=""):
 	outlen = getOpt("pack")[1]
 	if (outlen > 32 or outlen % 8 != 0):
 		exitWithError(-1, "Unsupported pack size, must be 8, 16, or 32")
@@ -585,7 +587,7 @@ def convert(fin, fout, hname="", stdvector=False):
 			data_type = "int"
 		elif outlen == 16:
 			data_type = "short"
-		text += "{0}static const unsigned {1} {2}[] = {{{0}".format(eol, data_type, hname)
+		text += "{0}{1}static const unsigned {2} {3}[] = {{{0}".format(eol, typemod, data_type, hname)
 
 		ofs.write(text)
 
@@ -750,7 +752,7 @@ def main(argv):
 		# use source file to define default target file
 		target_file = os.path.join(getDirName(source_file), source_basename + ".h")
 
-	return convert(source_file, target_file, getOpt("hname")[1], getOpt("stdvector")[1])
+	return convert(source_file, target_file, getOpt("hname")[1], getOpt("stdvector")[1], getOpt("typemod")[1])
 
 
 # program entry point.
